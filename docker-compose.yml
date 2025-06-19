@@ -1,0 +1,18 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container-name: hrms-db
+    environment:
+      POSTGRES_USER: hrmadmin
+      POSTGRES_PASSWORD: hrm123
+      POSTGRES_DB: hrmsDB
+      POPULATE_DEMO: "false"    # Set this to true if you want to populate with demo tables.
+    ports:
+      - "5431:5432"   # If postgres is not installed on host computer
+    volumes:
+      - data_sql:/var/lib/postgresql/data
+
+volumes:
+  data_sql: 
