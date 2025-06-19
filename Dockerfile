@@ -9,4 +9,3 @@ COPY setup/ /docker-entrypoint-initdb.d/
 RUN chmod +x docker-entrypoint-initdb.d/entrypoint.sh
 
 
-# This is my first time building a docker image
