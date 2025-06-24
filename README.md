@@ -11,9 +11,9 @@ HRMS stands for **Human Resorurce Management System**. It is a software that hel
 - Performance Management and Analysis
 - Payroll, Benefits and Compensation
 
-## Design (ER Diagram)
+<!-- ## Design (ER Diagram)
 
-![image](./ER_DIAGRAMS/HRMS%20ER%20Diagram%201.png)
+![image](./ER_DIAGRAMS/HRMS%20ER%20Diagram%201.png) -->
 
 ## Implementation
 

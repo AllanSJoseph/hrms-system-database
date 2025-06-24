@@ -18,6 +18,7 @@
 -- Creating Employee Table
 CREATE TABLE employees(
 	employee_id SERIAL PRIMARY KEY,
+	employee_no VARCHAR UNIQUE,
 	first_name VARCHAR NOT NULL,
 	last_name VARCHAR NOT NULL,
 	personal_mobile VARCHAR(15),
@@ -27,7 +28,6 @@ CREATE TABLE employees(
 	dob DATE NOT NULL,
 	martial_status VARCHAR NOT NULL,
 	dept_id INT,         --Foreign Key
-	project_id INT,      --Foreign Key
 	wlocation_id INT     --Foreign Key
 );
 
@@ -38,8 +38,8 @@ CREATE TABLE department(
 	dept_id SERIAL PRIMARY KEY,
 	dept_name VARCHAR,
 	no_of_members INT NOT NULL,
-	manager_id INT,
-	FOREIGN KEY (manager_id) REFERENCES employees(employee_id) ON DELETE SET NULL
+	dept_head_id INT,
+	FOREIGN KEY (dept_head_id) REFERENCES employees(employee_id) ON DELETE SET NULL
 );
 
 
@@ -54,7 +54,19 @@ CREATE TABLE projects(
 	project_completion_date DATE,
 	project_status VARCHAR,
 	dept_id INT NOT NULL,
-	FOREIGN KEY (dept_id) REFERENCES department(dept_id) ON DELETE CASCADE
+	manager_id INT,
+	FOREIGN KEY (dept_id) REFERENCES department(dept_id) ON DELETE CASCADE,
+	FOREIGN KEY (manager_id) REFERENCES employees(employee_id) ON DELETE SET NULL
+);
+
+-- CREATE Employee Projects Table
+
+CREATE TABLE employee_projects(
+	employee_id INT,
+	project_id INT,
+	PRIMARY KEY (employee_id, project_id),
+	FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE,
+	FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
 );
 
 
@@ -62,6 +74,7 @@ CREATE TABLE projects(
 
 CREATE TABLE work_location(
 	wlocation_id SERIAL PRIMARY KEY,
+	w_type VARCHAR DEFAULT 'On-Site',
 	w_address TEXT NOT NULL,
 	city VARCHAR NOT NULL,
 	state VARCHAR NOT NULL,
@@ -97,8 +110,10 @@ CREATE TABLE tasks(
 	task_description TEXT,
 	status VARCHAR NOT NULL,
 	project_id INT NOT NULL,
+	assigned_to INT,
 	created_by INT,
 	FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE,
+	FOREIGN KEY (assigned_to) REFERENCES employees(employee_id) ON DELETE SET NULL, 
 	FOREIGN KEY (created_by) REFERENCES employees(employee_id) ON DELETE SET NULL
 );
 
@@ -111,20 +126,6 @@ CREATE TABLE time_logs(
 	start_time TIMESTAMP,
 	end_time TIMESTAMP,
 	total_time_spent INTERVAL NOT NULL,
-	employee_id INT NOT NULL,
-	task_id INT NOT NULL,
-	FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE,
-	FOREIGN KEY (task_id) REFERENCES tasks(task_id) ON DELETE CASCADE
-);
-
-
--- CREATE Time Sheet Table
-
-CREATE TABLE time_sheet(
-	sheet_id SERIAL PRIMARY KEY,
-	month_year DATE NOT NULL,
-	hours_spent INTERVAL NOT NULL,
-	remarks TEXT,
 	employee_id INT NOT NULL,
 	task_id INT NOT NULL,
 	FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE,
@@ -146,16 +147,16 @@ CREATE TABLE attendance(
 );
 
 
--- CREATE Feedback Table
+-- CREATE Manager Feedback Table
 
-CREATE TABLE feedback(
+CREATE TABLE manager_feedback(
 	feedback_id SERIAL PRIMARY KEY,
 	feedback_date DATE NOT NULL,
 	comments TEXT NOT NULL,
 	rating INT NOT NULL,
-	feedbacker_id INT,
+	manager_id INT,
 	employee_id INT NOT NULL,
-	FOREIGN KEY (feedbacker_id) REFERENCES employees(employee_id) ON DELETE SET NULL,
+	FOREIGN KEY (manager_id) REFERENCES employees(employee_id) ON DELETE CASCADE,
 	FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE
 );
 
@@ -168,15 +169,7 @@ REFERENCES department(dept_id)
 ON DELETE SET NULL;
 
 ALTER TABLE employees
-ADD FOREIGN KEY(project_id) 
-REFERENCES projects(project_id)
-ON DELETE SET NULL;
-
-ALTER TABLE employees
 ADD FOREIGN KEY(wlocation_id)
 REFERENCES work_location(wlocation_id)
 ON DELETE SET NULL;
-
-ALTER TABLE employees 
-ALTER COLUMN work_mobile TYPE VARCHAR(15);
 
