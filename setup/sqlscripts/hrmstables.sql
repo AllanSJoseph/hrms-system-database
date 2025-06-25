@@ -64,6 +64,8 @@ CREATE TABLE projects(
 CREATE TABLE employee_projects(
 	employee_id INT,
 	project_id INT,
+	start_date DATE NOT NULL,
+	end_date DATE,
 	PRIMARY KEY (employee_id, project_id),
 	FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE,
 	FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE

@@ -11,7 +11,7 @@ SELECT * FROM tasks;
 
 SELECT * FROM time_logs;
 
-SELECT * FROM time_sheet;
+SELECT * FROM employee_projects;
 
 SELECT * FROM payroll;
 
