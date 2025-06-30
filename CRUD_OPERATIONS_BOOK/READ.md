@@ -66,10 +66,10 @@ WHERE wlocation_id = <wlocation_id>; -- OR wlocation_id IS NULL
 
 ```sql
 SELECT d.dept_id, d.dept_name, d.no_of_members, 
-e.first_name || ' ' || e.last_name AS manager
+e.first_name || ' ' || e.last_name AS department_head
 FROM department d
 LEFT JOIN employees e
-ON d.manager_id = e.employee_id;
+ON d.dept_head_id = e.employee_id;
 ```
 
 #### Expected Output:
@@ -167,29 +167,39 @@ WHERE l.employee_id = 1;
 This one shows all the log entries created by an employee.
 
 
-## Reading Timesheets
+## Generating Timesheets
 
 Below sql command shows the time_sheets created by an employee.
 
 ```sql
 SELECT 
-s.month_year, s.hours_spent, s.remarks,
-e.first_name || ' ' || e.last_name AS employee_name,
-t.task_name 
-FROM time_sheet s 
-LEFT JOIN employees e
-ON s.employee_id = e.employee_id
-LEFT JOIN tasks t 
-ON s.task_id = t.task_id
-WHERE s.employee_id = <requested_employee_id>;
+    e.employee_id,
+    e.first_name || ' ' || e.last_name AS employee_name,
+    t.task_id,
+    t.task_name,
+    DATE_TRUNC('month', l.log_date) AS month,
+    SUM(l.end_time - l.start_time) AS total_time_spent
+FROM time_logs l
+JOIN employees e ON e.employee_id = l.employee_id
+JOIN tasks t ON t.task_id = l.task_id
+WHERE l.log_date >= DATE_TRUNC('month', CURRENT_DATE)
+AND e.employee_id = <requested_employee_id> -- Insert employee id here 
+GROUP BY 
+    e.employee_id,
+    e.first_name,
+    e.last_name,
+    t.task_id,
+    t.task_name,
+    DATE_TRUNC('month', l.log_date);
+
 ```
 
 #### Expected Output
 Timesheet of Employee with id 1
 ```sh
- month_year | hours_spent | remarks  | employee_name |    task_name
-------------+-------------+----------+---------------+-----------------
- 2025-06-01 | 04:00:00    | June log | Anjali Sharma | HR Policy Draft
+ employee_id | employee_name | task_id |  task_name  |           month           | total_time_spent
+-------------+---------------+---------+-------------+---------------------------+------------------
+           7 | Emily Clark   |       3 | Backend API | 2025-06-01 00:00:00+05:30 | 17:00:00
 (1 row)
 ```
 

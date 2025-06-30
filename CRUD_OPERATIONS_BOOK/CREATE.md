@@ -53,6 +53,7 @@ INSERT INTO projects VALUES(
 ## Inserting Work Location Data
 ```sql
 INSERT INTO work_location VALUES(
+	<w_type>, 
 	<w_address>,
 	<city>,
 	<state>,
@@ -109,18 +110,17 @@ INSERT INTO time_logs VALUES(
 **Note:** ```task_id``` is a foreign key, so while inputting the id value must exist on ```tasks``` table.
 
 
-## Adding created Timesheets to DB
+## Assigning Projects for employees
 
 ```sql
-INSERT INTO time_sheet VALUES(
-    <month_year>,
-	<hours_spent>,
-	<remarks>,
-	<employee_id>,      --Reference: employees
-	<task_id>,          --Reference: tasks
+INSERT INTO employee_projects VALUES(
+	<employee_id>,		--Reference: employees
+	<project_id>,		--Reference: Projects
+	<start_date>,
+	<end_date>
 );
 ```
-**Note:** ```task_id``` is a foreign key, so while inputting the id value must exist on ```tasks``` table.
+**Note:** ```employee_id``` and ```project_id``` are composite keys, make sure the combination of employee and project id's should be unique.
 
 
 ## Inserting Attendance Data
@@ -137,18 +137,17 @@ INSERT INTO attendance VALUES(
 **Note:** ```employee_id``` is a foreign key, so while inputting the id value must exist on ```employees``` table.
 
 
-## Inserting Employee Feedbacks into DB
+## Inserting Manager Feedbacks into DB
 ```sql
-INSERT INTO feedback VALUES(
+INSERT INTO manager_feedback VALUES(
 	<feedback_date>,
 	<comments>,
 	<rating>,
-	<feedbacker_id>,        --Reference: employees
+	<manager_id>,        --Reference: employees
 	<employee_id>,          --Reference: employees
 );
 ```
-**Note:** ```feedbacker_id``` and ```employee_id``` are foreign keys, so while inputting the id value must exist on ```employees``` table. 
+**Note:** ```manager_id``` and ```employee_id``` are foreign keys, so while inputting the id value must exist on ```employees``` table. 
 
-```feedbacker_id``` is the employee who is giving the feedback. ```employee_id``` is the feedback of the receipient employee. 
+```manager_id``` is the employee who is giving the feedback. ```employee_id``` is the feedback of the receipient employee. 
 
-```feedbacker_id``` can be null, the system should consider it as anonymous feedback, incase the feedbacker wanted to stay so.

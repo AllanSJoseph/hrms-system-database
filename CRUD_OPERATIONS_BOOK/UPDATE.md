@@ -66,17 +66,6 @@ SET log_date = <new_log>,
 WHERE log_id = <requested_log_id>
 ```
 
-## Updating Time Sheets
-
-```sql 
-UPDATE time_sheet
-SET month_year = <new_month_year>,
-	hours_spent = <new_hours_spent>,
-	remarks = <new_remarks>,
-	task_id = <new_task_id>     --Foreign Key
-WHERE sheet_id = <requested_sheet_id>;
-```
-
 ## Updating Attendance
 
 ```sql
@@ -89,10 +78,10 @@ SET check_in_time = <new_check_in_time>,
 WHERE attendance_id = <requested_attendance_id>;
 ```
 
-## Updating Feedback
+## Updating Manager Feedback
 
 ```sql
-UPDATE feedback
+UPDATE manager_feedback
 SET feedback_date = <new_feedback_date>,
 	comments = <new_comments>,
 	rating = <new_rating>
@@ -121,6 +110,7 @@ WHERE payroll_id = <requested_payroll_id>
 ```sql
 UPDATE work_location
 SET w_address = <new_w_address>,
+	w_type = <new_w_type>,
 	city = <new_city>,
 	state = <new_state>,
 	country = <new_country>,
