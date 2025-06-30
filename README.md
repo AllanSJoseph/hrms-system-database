@@ -1,19 +1,21 @@
 # HRMS DATABASE DESIGN
 
+Database design for Human Resource Management System, done as part of my internship at Gadgeon Systems Pvt Ltd.
+
 ## HRMS System Overview.
 
 HRMS stands for **Human Resorurce Management System**. It is a software that helps organisations to digitalize, automate and centralize common HR processes, such as employee data storage, recruitment, time and attendance, payroll, performance management and analysis, etc.
 
-### Main Requirements
+### Main Requirements that this DB satisfy
 
 - Employee Data Storage and Management
 - Time and Attendance
 - Performance Management and Analysis
 - Payroll, Benefits and Compensation
 
-<!-- ## Design (ER Diagram)
+## Design (ER Diagram)
 
-![image](./ER_DIAGRAMS/HRMS%20ER%20Diagram%201.png) -->
+![image](./ER_DIAGRAMS/HRMS_ER_DIAGRAM.png)
 
 ## Implementation
 
